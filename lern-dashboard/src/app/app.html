@@ -1,0 +1,181 @@
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">L</div>
+      <span>LernSpace</span>
+    </div>
+
+    <p class="menu-label">MENÜ</p>
+
+    <a href="#start" class="menu-item active">
+      <span>⌂</span> Übersicht
+    </a>
+    <a href="#subjects" class="menu-item">
+      <span>▤</span> Meine Fächer
+    </a>
+    <a href="#tasks" class="menu-item">
+      <span>✓</span> Aufgaben
+    </a>
+
+    <div class="sidebar-bottom">
+      <div class="avatar">M</div>
+      <div>
+        <strong>Mein Profil</strong>
+        <p>Schüler</p>
+      </div>
+    </div>
+  </aside>
+
+  <main id="start" class="main-content">
+
+    <header class="topbar">
+      <div>
+        <p class="muted">DEIN PERSÖNLICHER LERNBEREICH</p>
+        <h1>Hallo! 👋</h1>
+      </div>
+
+      <button
+        class="mode-button"
+        (click)="toggleStudyMode()">
+        {{ studyMode ? 'Lernmodus beenden' : 'Lernmodus starten' }}
+      </button>
+    </header>
+
+    <section class="welcome-card">
+      <div class="welcome-text">
+        <span class="tag">DEIN ZIEL</span>
+        <h2>Jeden Tag ein bisschen besser.</h2>
+        <p>
+          Organisiere deinen Lernalltag und behalte
+          deine Fortschritte im Blick.
+        </p>
+        <a href="#tasks" class="primary-link">
+          Aufgaben ansehen →
+        </a>
+      </div>
+
+      <div class="illustration" aria-label="Buch und Stift">
+        <div class="sun"></div>
+        <div class="book">
+          <div class="book-line"></div>
+          <div class="book-line"></div>
+          <div class="book-line"></div>
+        </div>
+        <div class="pencil">✎</div>
+        <div class="sparkle">✦</div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div class="stat-icon purple-bg">▤</div>
+        <p>Meine Fächer</p>
+        <h3>{{ subjects.length }}</h3>
+        <span>Aktive Lernbereiche</span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon green-bg">✓</div>
+        <p>Erledigte Aufgaben</p>
+        <h3>{{ completedTasks }} / {{ tasks.length }}</h3>
+        <span>Dein aktueller Stand</span>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon orange-bg">☆</div>
+        <p>Durchschnittlicher Fortschritt</p>
+        <h3>
+          {{ (subjects[0].progress + subjects[1].progress +
+              subjects[2].progress) / subjects.length }}%
+        </h3>
+        <span>Über alle Fächer</span>
+      </article>
+    </section>
+
+    <section id="subjects" class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Meine Fächer</h2>
+          <p>So weit bist du bereits gekommen.</p>
+        </div>
+      </div>
+
+      <div class="subject-grid">
+        @for (subject of subjects; track subject.name) {
+          <article class="subject-card">
+            <div class="subject-top">
+              <div class="subject-symbol"
+                   [class.purple]="subject.color === 'purple'"
+                   [class.blue]="subject.color === 'blue'"
+                   [class.orange]="subject.color === 'orange'">
+                {{ subject.symbol }}
+              </div>
+              <span class="progress-label">
+                {{ subject.progress }}%
+              </span>
+            </div>
+
+            <h3>{{ subject.name }}</h3>
+            <p>{{ subject.description }}</p>
+
+            <div class="progress-track">
+              <div
+                class="progress-fill"
+                [class.purple-fill]="subject.color === 'purple'"
+                [class.blue-fill]="subject.color === 'blue'"
+                [class.orange-fill]="subject.color === 'orange'"
+                [style.width.%]="subject.progress">
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section id="tasks" class="section task-section">
+      <div class="section-heading">
+        <div>
+          <h2>Meine Aufgaben</h2>
+          <p>Klicke eine Aufgabe an, sobald sie erledigt ist.</p>
+        </div>
+        <span class="task-counter">
+          {{ completedTasks }} von {{ tasks.length }}
+        </span>
+      </div>
+
+      <div class="task-list">
+        @for (task of tasks; track task.title; let i = $index) {
+          <button
+            class="task-row"
+            [class.task-done]="task.done"
+            (click)="toggleTask(i)">
+
+            <span class="checkbox">
+              {{ task.done ? '✓' : '' }}
+            </span>
+
+            <span class="task-title">{{ task.title }}</span>
+
+            <span class="task-status">
+              {{ task.done ? 'Erledigt' : 'Offen' }}
+            </span>
+          </button>
+        }
+      </div>
+    </section>
+
+    @if (studyMode) {
+      <div class="study-banner">
+        <strong>📚 Lernmodus ist aktiv!</strong>
+        <p>Konzentriere dich auf deine nächste Aufgabe.</p>
+      </div>
+    }
+
+    <footer>
+      LernSpace · Selbst erstellt mit Angular
+    </footer>
+
+  </main>
+</div>
